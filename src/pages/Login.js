@@ -6,26 +6,32 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);  // Added loading state
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);  // Start loading
 
     try {
       const response = await fetch('http://localhost:5000/users');
+      if (!response.ok) throw new Error('Failed to fetch data');
+      
       const users = await response.json();
       const user = users.find(user => user.email === email && user.password === password);
 
       if (user) {
         login(user);  // Set user data in AuthContext
-        navigate('/profile');  // Redirect to profile or desired page
+        navigate('/profile');  // Redirect to profile
       } else {
         setError('Invalid email or password');
       }
     } catch (err) {
       console.error(err);
-      setError('Login failed');
+      setError('Login failed. Please try again later.');
+    } finally {
+      setLoading(false);  // End loading
     }
   };
 
@@ -52,7 +58,7 @@ const Login = () => {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
+        {loading ? <p>Loading...</p> : <button type="submit">Login</button>}
       </form>
     </div>
   );
