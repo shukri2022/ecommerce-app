@@ -1,57 +1,57 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "name": "MANASSEH CHEGE",
-            "email": "chegemanasseh2@gmail.com",
-            "password": "0714263306",
-            "number": "0714263306"
-        },
-        {
-            "id": 2,
-            "name": "SHUKRI ABDI",
-            "email": "shukri.abdi@example.com",
-            "password": "0726563614",
-            "number": "0726563614"
-        },
-        {
-            "id": 3,
-            "name": "JOYCE WANGUI",
-            "email": "joyce.wangui@example.com",
-            "password": "0750886840",
-            "number": "0750886840"
-        },
-        {
-            "id": 4,
-            "name": "ELIZABETH NJERI",
-            "email": "elizabeth.njeri@example.com",
-            "password": "0710105312",
-            "number": "0710105312"
-        }
-    ],
-    "products": [
-        {
-            "id": 1,
-            "name": "Product 1",
-            "price": 100,
-            "description": "Description 1"
-        },
-        {
-            "id": 2,
-            "name": "Product 2",
-            "price": 200,
-            "description": "Description 2"
-        }
-    ],
-    "orders": [
-        {
-            "id": 1,
-            "userId": 1,
-            "productIds": [
-                1,
-                2
-            ],
-            "total": 300
-        }
-    ]
+  "users": [
+    {
+      "id": "1",
+      "name": "MANASSEH CHEGE",
+      "email": "chegemanasseh2@gmail.com",
+      "password": "0714263306",
+      "number": "0714263306"
+    },
+    {
+      "id": "2",
+      "name": "SHUKRI ABDI",
+      "email": "shukri.abdi@example.com",
+      "password": "0726563614",
+      "number": "0726563614"
+    },
+    {
+      "id": "3",
+      "name": "JOYCE WANGUI",
+      "email": "joycewangui590@gmailcom",
+      "password": "0750886840",
+      "number": "0750886840"
+    },
+    {
+      "id": "4",
+      "name": "ELIZABETH NJERI",
+      "email": "elizabeth.njeri@example.com",
+      "password": "0710105312",
+      "number": "0710105312"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Product 1",
+      "price": 100,
+      "description": "Description 1"
+    },
+    {
+      "id": "2",
+      "name": "Product 2",
+      "price": 200,
+      "description": "Description 2"
+    }
+  ],
+  "orders": [
+    {
+      "id": "1",
+      "userId": 1,
+      "productIds": [
+        1,
+        2
+      ],
+      "total": 300
+    }
+  ]
 }
