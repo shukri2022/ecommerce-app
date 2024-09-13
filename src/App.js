@@ -5,9 +5,9 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
-import CheckoutPage from './pages/CheckoutPage.js';
-import ProfilePage from './pages/Profile.js';
-import OrderPage from './pages/Order.js';
+import CheckoutPage from './pages/CheckoutPage';
+import ProfilePage from './pages/Profile';
+import OrderPage from './pages/Order';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
@@ -20,7 +20,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/products" element={<ProductPage />} />
+
+        {/* Protected Routes */}
+        <Route path="/products" element={<PrivateRoute><ProductPage /></PrivateRoute>} />
         <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
         <Route path="/checkout" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
