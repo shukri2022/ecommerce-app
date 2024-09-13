@@ -19,7 +19,16 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send data to json-server
+      // Check if the email is already registered
+      const { data: users } = await axios.get('http://localhost:5000/users');
+      const emailExists = users.some((user) => user.email === formData.email);
+
+      if (emailExists) {
+        alert('Email is already registered.');
+        return;
+      }
+
+      // Proceed with signup if the email is unique
       await axios.post('http://localhost:5000/users', formData);
       alert('Signup successful!');
 
