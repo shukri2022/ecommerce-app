@@ -1,13 +1,35 @@
-header {
-    background-color: #007BFF;
-    padding: 15px 20px;
-    color: white;
-    text-align: center;
-  }
-  
-  header a {
-    color: white;
-    font-weight: bold;
-    margin: 0 15px;
-  }
-  
+/* General styling for the vertical menu */
+.vertical-menu {
+  width: 200px;
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-right: 2px solid #ddd;
+  height: 100vh; /* Full-height */
+  position: fixed; /* Make it fixed on the left side */
+  top: 0;
+  left: 0;
+}
+
+.vertical-menu a {
+  background-color: #f1f1f1;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.vertical-menu a:hover {
+  background-color: #ddd;
+}
+
+.vertical-menu a.active {
+  background-color: #007BFF;
+  color: white;
+}
+
+/* Body margin adjustment to accommodate the fixed menu */
+body {
+  margin-left: 220px; /* Adjust according to the menu width */
+}

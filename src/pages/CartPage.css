@@ -1,15 +1,23 @@
-.cart-item {
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .cart-item h2 {
-    font-size: 18px;
-  }
-  
-  .cart-item p {
-    margin-top: 5px;
-  }
-  
+..cart-page ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.cart-page li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cart-page button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-page button:hover {
+  background-color: #0056b3;
+}

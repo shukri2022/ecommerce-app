@@ -1,5 +1,9 @@
+// src/pages/Signup.js
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../firebase'; // Firebase setup
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -8,37 +12,31 @@ const Signup = () => {
     password: '',
     number: ''
   });
+  const navigate = useNavigate();
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      // Check if the email is already registered
-      const { data: users } = await axios.get('http://localhost:5000/users');
-      const emailExists = users.some((user) => user.email === formData.email);
+      // Firebase Authentication for signup
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = userCredential.user;
 
-      if (emailExists) {
-        alert('Email is already registered.');
-        return;
-      }
-
-      // Proceed with signup if the email is unique
-      await axios.post('http://localhost:5000/users', formData);
-      alert('Signup successful!');
-
-      // Clear form fields
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        number: ''
+      // Store user data in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        name: formData.name,
+        email: formData.email,
+        number: formData.number,
+        uid: user.uid
       });
+
+      alert('Signup successful!');
+      navigate('/login');
     } catch (error) {
       console.error('Error during signup:', error);
       alert('Signup failed. Please try again.');
@@ -49,50 +47,38 @@ const Signup = () => {
     <div>
       <h1>Signup Page</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="number">Phone Number:</label>
-          <input
-            type="text"
-            id="number"
-            name="number"
-            value={formData.number}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Full Name"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+        />
+        <input
+          type="text"
+          name="number"
+          value={formData.number}
+          onChange={handleChange}
+          placeholder="Phone Number"
+          required
+        />
         <button type="submit">Sign Up</button>
       </form>
     </div>

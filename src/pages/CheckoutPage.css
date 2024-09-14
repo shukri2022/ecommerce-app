@@ -1,0 +1,9 @@
+.checkout-page form {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-page input {
+  margin-bottom: 15px;
+  padding: 2px;
+}

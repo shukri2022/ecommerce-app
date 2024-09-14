@@ -1,20 +1,18 @@
+// src/components/PrivateRoute.js
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext'; // Firebase Auth Context
 
 const PrivateRoute = ({ children }) => {
-    const { user } = useAuth();
-    const location = useLocation();
+  const { user } = useAuth(); // Get user from AuthContext
+  const location = useLocation();
 
-    if (user === undefined) {
-        return <div>Loading...</div>;
-    }
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} />; // Redirect to login if not authenticated
+  }
 
-    return user ? (
-        children
-    ) : (
-        <Navigate to="/login" state={{ from: location }} />
-    );
+  return children;
 };
 
 export default PrivateRoute;
+

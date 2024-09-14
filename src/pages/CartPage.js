@@ -2,24 +2,30 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import './CartPage.css';
+
 const CartPage = () => {
   const { cartItems, removeFromCart } = useCart();
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div>
+    <div className="cart-page">
       <h1>Your Cart</h1>
       {cartItems.length === 0 ? (
-        <p>No items in the cart</p>
+        <p>Your cart is empty.</p>
       ) : (
-        cartItems.map((item) => (
-          <div key={item.id}>
-            <h2>{item.name}</h2>
-            <p>Price: ${item.price}</p>
-            <p>Quantity: {item.quantity}</p>
-            <button onClick={() => removeFromCart(item.id)}>Remove</button>
-          </div>
-        ))
+        <ul>
+          {cartItems.map((item) => (
+            <li key={item.id}>
+              <span>{item.name}</span>
+              <span>${item.price}</span>
+              <span>x {item.quantity}</span>
+              <button onClick={() => removeFromCart(item.id)}>Remove</button>
+            </li>
+          ))}
+        </ul>
       )}
+      <h3>Total: ${total.toFixed(2)}</h3>
+      <button>Proceed to Checkout</button>
     </div>
   );
 };

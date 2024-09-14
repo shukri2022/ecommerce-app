@@ -1,99 +1,55 @@
+// src/pages/CheckoutPage.js
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import axios from 'axios';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const CheckoutPage = () => {
-    const { cartItems } = useCart();
-    const [formData, setFormData] = useState({
-        name: '',
-        address: '',
-        paymentMethod: 'credit-card', // default payment method
-    });
+  const { cartItems } = useCart();
+  const [formData, setFormData] = useState({ name: '', address: '' });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const order = {
+      name: formData.name,
+      address: formData.address,
+      items: cartItems,
+      total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Process the order (this could be sending the order to a backend service)
-        axios.post('http://localhost:5000/orders', {
-            ...formData,
-            items: cartItems,
-            total: cartItems.reduce((total, item) => total + item.price, 0),
-        })
-        .then(() => {
-            alert('Order placed successfully!');
-            // Optionally clear the cart here
-        })
-        .catch((error) => {
-            console.error('Error processing order:', error);
-            alert('Error processing order.');
-        });
-    };
+    try {
+      await addDoc(collection(db, 'orders'), order);
+      alert('Order placed successfully!');
+    } catch (error) {
+      console.error('Error placing order:', error);
+    }
+  };
 
-    const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
-
-    return (
-        <div>
-            <h1>Checkout</h1>
-            <div className="cart-summary">
-                <h2>Order Summary</h2>
-                {cartItems.length === 0 ? (
-                    <p>No items in the cart.</p>
-                ) : (
-                    <ul>
-                        {cartItems.map((item) => (
-                            <li key={item.id}>
-                                <p>{item.name} - ${item.price}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                <h3>Total Price: ${totalPrice.toFixed(2)}</h3>
-            </div>
-            <form onSubmit={handleSubmit}>
-                <h2>Shipping Information</h2>
-                <label>
-                    Name:
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <label>
-                    Address:
-                    <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <label>
-                    Payment Method:
-                    <select
-                        name="paymentMethod"
-                        value={formData.paymentMethod}
-                        onChange={handleChange}
-                    >
-                        <option value="credit-card">Credit Card</option>
-                        <option value="paypal">PayPal</option>
-                        {/* Add other payment methods as needed */}
-                    </select>
-                </label>
-                <button type="submit">Place Order</button>
-            </form>
-        </div>
-    );
+  return (
+    <div className="checkout-page">
+      <h1>Checkout</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          placeholder="Full Name"
+          required
+        />
+        <input
+          type="text"
+          name="address"
+          value={formData.address}
+          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+          placeholder="Shipping Address"
+          required
+        />
+        <button type="submit">Place Order</button>
+      </form>
+    </div>
+  );
 };
 
 export default CheckoutPage;

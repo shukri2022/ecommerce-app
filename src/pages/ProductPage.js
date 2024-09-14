@@ -1,17 +1,20 @@
 // src/pages/ProductPage.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './ProductPage.css';
-
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 import ProductItem from '../components/ProductItem';
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/products')
-      .then((response) => setProducts(response.data))
-      .catch((error) => console.error('Error fetching products:', error));
+    const fetchProducts = async () => {
+      const querySnapshot = await getDocs(collection(db, 'products'));
+      const productsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setProducts(productsData);
+    };
+
+    fetchProducts();
   }, []);
 
   return (

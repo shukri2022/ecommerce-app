@@ -1,0 +1,172 @@
+/* General reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.home-page {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: #ff6347; /* A bold red color */
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 1.2rem;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Section Styling */
+section {
+  margin-bottom: 40px;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+}
+
+ul li:hover {
+  background-color: #f2f2f2;
+}
+
+/* Best-sellers & New-arrivals */
+.best-sellers ul,
+.new-arrivals ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.best-sellers ul li,
+.new-arrivals ul li {
+  flex: 1 1 calc(33.333% - 20px); /* Responsive flexbox grid */
+}
+
+.best-sellers ul li,
+.new-arrivals ul li {
+  text-align: center;
+  background-color: #ffefef;
+  padding: 20px;
+}
+
+.best-sellers ul li:hover,
+.new-arrivals ul li:hover {
+  background-color: #ffe2e2;
+}
+
+/* Exclusive Offers */
+.exclusive-offers ul {
+  background-color: #fffae5;
+  border: 2px solid #ffc107;
+  padding: 20px;
+}
+
+.exclusive-offers ul li {
+  color: #333;
+  font-weight: bold;
+}
+
+/* Why Shop with Us Section */
+.why-shop-with-us ul li {
+  color: #4caf50;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+/* Shop by Category */
+.shop-by-category ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.shop-by-category ul li {
+  flex: 1 1 calc(25% - 15px); /* Four columns */
+  background-color: #e6f7ff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.shop-by-category ul li:hover {
+  background-color: #d0f0ff;
+  cursor: pointer;
+}
+
+/* Customer Reviews */
+.customer-reviews blockquote {
+  background-color: #f0f8ff;
+  border-left: 5px solid #00aaff;
+  padding: 15px;
+  margin: 10px 0;
+  font-style: italic;
+}
+
+.customer-reviews blockquote p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.customer-reviews h2 {
+  margin-bottom: 10px;
+}
+
+blockquote p {
+  font-style: italic;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .best-sellers ul li,
+  .new-arrivals ul li,
+  .shop-by-category ul li {
+    flex: 1 1 100%; /* Stacks each item on small screens */
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  header p {
+    font-size: 1rem;
+  }
+}
