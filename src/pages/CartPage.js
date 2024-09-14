@@ -1,9 +1,9 @@
 // src/pages/CartPage.js
 import React from 'react';
 import { useCart } from '../context/CartContext';
-
+import './CartPage.css';
 const CartPage = () => {
-  const { cartItems, removeFromCart } = useCart(); // Get removeFromCart function from CartContext
+  const { cartItems, removeFromCart } = useCart();
 
   return (
     <div>
@@ -16,7 +16,7 @@ const CartPage = () => {
             <h2>{item.name}</h2>
             <p>Price: ${item.price}</p>
             <p>Quantity: {item.quantity}</p>
-            <button onClick={() => removeFromCart(item.id)}>Remove</button> {/* Remove from Cart functionality */}
+            <button onClick={() => removeFromCart(item.id)}>Remove</button>
           </div>
         ))
       )}
