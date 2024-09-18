@@ -1,4 +1,3 @@
-// src/pages/ProductPage.js
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -30,3 +29,4 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+

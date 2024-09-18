@@ -1,24 +1,24 @@
-// src/pages/Profile.js
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext'; // Use the AuthContext to get user info
+import { useAuth } from '../context/AuthContext';  // Ensure AuthContext is correctly imported
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase'; // Firestore reference
+import { db } from '../firebase';  // Ensure Firebase is correctly configured
 
 const ProfilePage = () => {
-  const { user, logout } = useAuth(); // Get user from context
+  const { user, logout } = useAuth();
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      const fetchUserData = async () => {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
+    const fetchUserData = async () => {
+      if (user) {
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
         setUserData(userDoc.data());
-      };
+      }
+    };
 
-      fetchUserData();
-    }
+    fetchUserData();
   }, [user]);
 
   const handleLogout = () => {
@@ -27,7 +27,7 @@ const ProfilePage = () => {
   };
 
   if (!userData) {
-    return <div>Loading...</div>; // Loading state while fetching data
+    return <div>Loading...</div>;
   }
 
   return (
@@ -41,3 +41,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+

@@ -7,12 +7,12 @@ import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ProfilePage from './pages/Profile';
-import OrderPage from './pages/Order';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import OrderPage from './pages/Order';  // Correct import based on the file name
+import Header from './components/Header'; 
+import Footer from './components/Footer'; 
 import PrivateRoute from './components/PrivateRoute';
-import AuthProvider from './context/AuthContext'; // Firebase Auth Context
-import CartProvider from './context/CartContext'; // Cart Context
+import AuthProvider from './context/AuthContext';
+import CartProvider from './context/CartContext';
 
 function App() {
   return (
@@ -24,8 +24,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            
-            {/* Protected Routes */}
             <Route path="/products" element={<PrivateRoute><ProductPage /></PrivateRoute>} />
             <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
             <Route path="/checkout" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
@@ -40,3 +38,7 @@ function App() {
 }
 
 export default App;
+
+
+
+

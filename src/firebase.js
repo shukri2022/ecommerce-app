@@ -1,10 +1,8 @@
-// Import the functions you need from the SDKs
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCPnkos-gR4M3rLJZTVOQImntgjlFmc0aI",
   authDomain: "fahari-store.firebaseapp.com",
@@ -15,13 +13,15 @@ const firebaseConfig = {
   measurementId: "G-31FG616THQ"
 };
 
-// Initialize Firebase
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase services
-const auth = getAuth(app);  // Authentication
-const db = getFirestore(app);  // Firestore Database
-const analytics = getAnalytics(app);  // Firebase Analytics (optional)
+const auth = getAuth(app);
+const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
-// Export the necessary Firebase services
+// Export the services
 export { auth, db, analytics };
+
+

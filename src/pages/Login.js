@@ -1,54 +1,62 @@
-// src/pages/Login.js
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useAuth } from '../context/AuthContext'; // Custom context to track user
+import { auth } from '../firebase'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth(); // Context hook to track logged-in user
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from || '/'; // Redirect path after login
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Reset error state
+
     try {
-      // Firebase Authentication for login
+      // Firebase Authentication
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
-      // Call context login function
-      login(user);
-
-      navigate(from); // Redirect user after login
+      console.log('User logged in successfully:', user);
+      navigate('/profile'); // Redirect after successful login
     } catch (error) {
-      console.error('Login error:', error);
-      alert('Invalid credentials');
+      console.error('Login error: ', error.message);
+      if (error.code === 'auth/wrong-password') {
+        setError('Incorrect password. Please try again.');
+      } else if (error.code === 'auth/user-not-found') {
+        setError('No user found with this email.');
+      } else {
+        setError('Invalid credentials. Please check your email or password.');
+      }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div>
+      <h2>Login</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 };
 
 export default Login;
+
+
+
