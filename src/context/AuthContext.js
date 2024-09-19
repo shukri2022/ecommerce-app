@@ -1,40 +1,39 @@
+// AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 
-const AuthContext = createContext(); // Create context for auth
+const AuthContext = createContext();
 
-// AuthProvider will wrap the app and provide authentication state and methods
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Holds user data
-  const [loading, setLoading] = useState(true); // Controls loading state
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Firebase listener for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false); // Loading done after getting the user
+      setLoading(false);
     });
-    return () => unsubscribe(); // Cleanup listener
+    return () => unsubscribe();
   }, []);
 
   const login = async (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password); // Firebase login
+    return signInWithEmailAndPassword(auth, email, password);
   };
 
   const logout = async () => {
-    return signOut(auth); // Firebase logout
+    return signOut(auth);
   };
 
-  // Provide auth context to children
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {!loading && children} {/* Only render children when loading is done */}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext); // Hook to use Auth context
-export default AuthProvider; // Default export
+export const useAuth = () => useContext(AuthContext);
+export default AuthProvider;
+
 
 

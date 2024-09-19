@@ -11,22 +11,36 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Reset error state
+    setError(''); // Clear any existing error
 
     try {
-      // Firebase Authentication
+      // Firebase Authentication: Sign in user
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log('User logged in successfully:', user);
-      navigate('/profile'); // Redirect after successful login
+      
+      // Redirect to profile page after successful login
+      navigate('/profile');
     } catch (error) {
-      console.error('Login error: ', error.message);
-      if (error.code === 'auth/wrong-password') {
-        setError('Incorrect password. Please try again.');
-      } else if (error.code === 'auth/user-not-found') {
-        setError('No user found with this email.');
-      } else {
-        setError('Invalid credentials. Please check your email or password.');
+      console.error('Login error:', error);
+
+      // Handle specific Firebase errors for invalid credentials
+      switch (error.code) {
+        case 'auth/wrong-password':
+          setError('Incorrect password. Please try again.');
+          break;
+        case 'auth/user-not-found':
+          setError('No user found with this email. Please sign up.');
+          break;
+        case 'auth/invalid-email':
+          setError('Invalid email format. Please check your email address.');
+          break;
+        case 'auth/invalid-credential':
+          setError('Invalid credential. Please try again.');
+          break;
+        default:
+          setError('Login failed. Please check your credentials and try again.');
+          break;
       }
     }
   };
@@ -34,6 +48,7 @@ const Login = () => {
   return (
     <div>
       <h2>Login</h2>
+      {/* Show error message if present */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
@@ -57,6 +72,5 @@ const Login = () => {
 };
 
 export default Login;
-
 
 

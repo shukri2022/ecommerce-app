@@ -1,74 +1,81 @@
-// src/pages/Signup.js
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'; // Firebase functions
-import { auth } from '../firebase'; // Import Firebase auth from your configuration
+import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../firebase'; 
+import { doc, setDoc } from 'firebase/firestore'; // Import Firestore functions
 
 const Signup = () => {
-  const [email, setEmail] = useState(''); // State to store the email
-  const [password, setPassword] = useState(''); // State to store the password
-  const [message, setMessage] = useState(''); // State to display messages (success/failure)
-  const [error, setError] = useState(''); // State to store errors
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
-  // Handle form submission for signup or login
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent the form from refreshing the page
-    setError(''); // Reset error message
-    setMessage(''); // Reset success message
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMessage('');
 
     try {
-      // Try to create a new user with the provided email and password
+      // Create user with Firebase authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user; // Access the user object
-      setMessage(`Signup successful! Welcome ${user.email}. You are now signed in.`);
-      console.log('User signed up successfully:', user); // Log user information
+      const user = userCredential.user;
+
+      // Save the user data in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        name: email.split('@')[0],  // Using the part of the email before '@' as a name
+        email: user.email,
+        number: '',  // You can later add more fields like phone number if needed
+      });
+
+      console.log('User registered successfully and data saved in Firestore:', user);
+      
+      // Set success message
+      setSuccessMessage('You have successfully signed up! Redirecting to profile...');
+      setTimeout(() => {
+        navigate('/profile'); // Redirect after a short delay
+      }, 2000);
     } catch (error) {
-      // If the email is already registered, log the user in instead
+      console.error('Sign-up error:', error);
       if (error.code === 'auth/email-already-in-use') {
-        try {
-          const loginCredential = await signInWithEmailAndPassword(auth, email, password);
-          const loggedInUser = loginCredential.user; // Access the logged-in user object
-          setMessage(`This email is already registered. Welcome back, ${loggedInUser.email}!`);
-          console.log('User logged in successfully:', loggedInUser); // Log user information
-        } catch (loginError) {
-          setError('Login failed. Please check your password.');
-          console.error('Login error:', loginError.message);
-        }
+        setError('The email address is already in use. Please log in instead.');
+      } else if (error.code === 'auth/invalid-email') {
+        setError('Invalid email address format. Please enter a valid email.');
+      } else if (error.code === 'auth/weak-password') {
+        setError('The password is too weak. Please choose a stronger password.');
       } else {
-        // If there is another error (weak password, invalid email, etc.)
-        setError(error.message);
-        console.error('Signup error:', error.message);
+        setError('Error signing up. Please try again later.');
       }
     }
   };
 
   return (
     <div>
-      <h2>Signup or Login Page</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error messages */}
-      {message && <p style={{ color: 'green' }}>{message}</p>} {/* Display success messages */}
+      <h2>Sign Up</h2>
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-        <button type="submit">Sign Up or Log In</button>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Sign Up</button>
       </form>
+      {error === 'The email address is already in use. Please log in instead.' && (
+        <p>
+          Already have an account? <a href="/login">Log in here</a>
+        </p>
+      )}
     </div>
   );
 };

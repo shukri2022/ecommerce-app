@@ -6,10 +6,10 @@ import Signup from './pages/Signup';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
-import ProfilePage from './pages/Profile';
-import OrderPage from './pages/Order';  // Correct import based on the file name
-import Header from './components/Header'; 
-import Footer from './components/Footer'; 
+import ProfilePage from './pages/Profile'; 
+import OrderPage from './pages/Order';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import AuthProvider from './context/AuthContext';
 import CartProvider from './context/CartContext';
@@ -38,7 +38,3 @@ function App() {
 }
 
 export default App;
-
-
-
-

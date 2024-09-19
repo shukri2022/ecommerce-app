@@ -1,55 +1,66 @@
-// src/pages/CheckoutPage.js
 import React, { useState } from 'react';
-import { useCart } from '../context/CartContext';
-import { addDoc, collection } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 const CheckoutPage = () => {
-  const { cartItems } = useCart();
-  const [formData, setFormData] = useState({ name: '', address: '' });
+  const { user } = useAuth();
+  const [fullName, setFullName] = useState('');
+  const [shippingAddress, setShippingAddress] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const order = {
-      name: formData.name,
-      address: formData.address,
-      items: cartItems,
-      total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    setLoading(true);
+
+    const orderData = {
+      userId: user.uid,
+      fullName,
+      shippingAddress,
+      productIds: [/* Add product IDs from cart */],
+      // total: /* {Calculate the total price from cart items }/
+      createdAt: new Date()
     };
 
+    console.log('Order data being sent:', orderData); // Log order data before sending
+
     try {
-      await addDoc(collection(db, 'orders'), order);
-      alert('Order placed successfully!');
+      const orderRef = collection(db, 'orders');
+      await addDoc(orderRef, orderData);
+      console.log('Order successfully placed!'); // Log success message
+      setLoading(false);
+      // Redirect to orders page or show success message
     } catch (error) {
-      console.error('Error placing order:', error);
+      console.error('Error placing order:', error); // Log error
+      setError('Error placing order');
+      setLoading(false);
     }
   };
 
   return (
-    <div className="checkout-page">
-      <h1>Checkout</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Full Name"
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          placeholder="Shipping Address"
-          required
-        />
-        <button type="submit">Place Order</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Full Name"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Shipping Address"
+        value={shippingAddress}
+        onChange={(e) => setShippingAddress(e.target.value)}
+        required
+      />
+      <button type="submit" disabled={loading}>Place Order</button>
+      {error && <p>{error}</p>}
+    </form>
   );
 };
 
 export default CheckoutPage;
+
+
+
